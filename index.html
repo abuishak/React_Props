@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>React Props</title>
+    
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;500;700&family=Montserrat:wght@300;700&family=Nanum+Pen+Script&display=swap">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" />
+    <link href="main.css" rel="stylesheet" type="text/css" />
+   
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+    
+      class HotNews extends React.Component {
+        constructor(props){
+          super(props);
+          this.state={
+            isEditing: false,
+            description: props.children
+            }
+            this.inpuText = React.createRef();
+        }
+        edit(){
+          
+          this.setState({
+            isEditing: true
+          })
+        }
+        delete(){
+          alert("delete button clicked")
+        }
+        save(){
+          const inputValue = this.inpuText.current.value
+          this.setState({
+            isEditing: false,
+            description: inputValue
+          });
+        }
+        renderEdit(){
+          const isEditing = this.state.isEditing;
+          const props = this.props;
+          if(isEditing === true){
+            return (
+              <React.Fragment>
+              <input
+               defaultValue={props.children}
+               ref={this.inpuText}
+               />
+              <button onClick={()=> this.save()}>Save</button>
+              </React.Fragment>
+            )
+          } else{
+            return(<p>{this.state.description}</p>)
+          }
+        }
+
+        render(){
+          const props = this.props;
+          const totalEditCount = this.state.totalEditCount;
+         
+          return(
+            <div className="newsContainer">
+              
+              <h1 >{props.title}</h1> 
+              {this.renderEdit()}              
+              <div className="action">
+              <button className="edit" onClick={()=>this.edit()}>Edit</button>
+              <button className="delete" onClick={this.delete}>Delete</button>
+              
+              </div>
+              
+              </div>
+          )
+        }
+      }
+      ReactDOM.render(
+        <div className="container">
+        <HotNews title="news 1">Bablu Plays today in IPL</HotNews>
+        <HotNews title="news 2">Raya also Plays today</HotNews>
+        </div>,
+        document.getElementById('root')
+      );
+
+    </script>
+    
+  </body>
+</html>
